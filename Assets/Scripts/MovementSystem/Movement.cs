@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 public class Movement : MonoBehaviour
 {
     //Assignables #===============================#
-    public LayerMask whatIsGround;
     public float maxSlopeAngle = 35f;
     public float runSpeed = 6500f;
     public float walkSpeed = 1000f;
@@ -85,6 +84,22 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
+        // Frictionless player collider with Minimum combine so contact friction
+        // is min(0, wall) = 0 regardless of what the wall has — lets the player
+        // glide along any surface instead of getting dragged to a stop by default
+        // Unity friction on colliders without a physics material.
+        var col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.sharedMaterial = new PhysicsMaterial("PlayerFrictionless")
+            {
+                dynamicFriction = 0f,
+                staticFriction = 0f,
+                frictionCombine = PhysicsMaterialCombine.Minimum,
+                bounceCombine = PhysicsMaterialCombine.Minimum,
+            };
+        }
+
         movementSystem = new MovementSystem();
         movementSystem.Movement.Enable();
 
@@ -148,10 +163,6 @@ public class Movement : MonoBehaviour
 
     private void OnCollisionStay(Collision other)
     {
-        //Make sure we are only checking for walkable layers
-        int layer = other.gameObject.layer;
-        if (whatIsGround != (whatIsGround | (1 << layer))) return;
-
         //Iterate through every collision in a physics update
         for (int i = 0; i < other.contactCount; i++)
         {
