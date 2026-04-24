@@ -72,6 +72,7 @@ public class Movement : MonoBehaviour
     public bool isWallRunning;
     private bool wallrunButtonHeld = false;
     public float maxWallRunCameraTilt = 15;
+    [HideInInspector] public float lastWallJumpTime = -999f;
 
     //Animations
     public Animator animator;
@@ -441,6 +442,7 @@ public class Movement : MonoBehaviour
                 rb.AddForce(-orientation.right * (jumpForce * 0.3f) * Time.fixedDeltaTime, ForceMode.Impulse);
             }
 
+            lastWallJumpTime = Time.time;
         }
     }
 }

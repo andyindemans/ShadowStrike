@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 46442892}
   - component: {fileID: 46442891}
   - component: {fileID: 46442890}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: LowWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ BoxCollider:
   m_Material: {fileID: 13400000, guid: d68273bbc08eeb846a1d7bdcc8b83a75, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1280,6 +1280,7 @@ GameObject:
   - component: {fileID: 815337479}
   - component: {fileID: 815337478}
   - component: {fileID: 815337477}
+  - component: {fileID: 815337480}
   m_Layer: 0
   m_Name: PlayerView
   m_TagString: MainCamera
@@ -1361,6 +1362,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2050048617}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &815337480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 815337476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06f0c933310a2514589d6b59264a60f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpeedFX
+  move: {fileID: 1923601491}
+  cam: {fileID: 815337478}
+  baseFOV: 85
+  maxFOV: 100
+  fovResponsiveness: 8
+  boostDecay: 0.6
+  boostStrength: 0.85
 --- !u!1 &892131926
 GameObject:
   m_ObjectHideFlags: 0
@@ -2484,9 +2504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebfe6eebf885f73478d6b64588b2fb6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 9
   maxSlopeAngle: 35
   runSpeed: 6500
   walkSpeed: 1000
@@ -2516,6 +2533,7 @@ MonoBehaviour:
   maxWallSpeed: 7
   isWallRunning: 0
   maxWallRunCameraTilt: 15
+  lastWallJumpTime: -999
   animator: {fileID: 0}
   allowRunAnimation: 0
 --- !u!114 &1923601492
@@ -2533,7 +2551,7 @@ MonoBehaviour:
   vaultSpeed: 5
   whatIsVaultable:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 251
 --- !u!114 &1923601493
 MonoBehaviour:
   m_ObjectHideFlags: 0
