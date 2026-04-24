@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4a359981ce25548aec8aa409501dde, type: 3}
+  m_Name: Pistol
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  id: pistol
+  displayName: Pistol
+  firingMode: 0
+  fireRate: 6
+  range: 200
+  baseRecoil: 1
+  hipSpread: 3
+  adsSpread: 0.25
+  magSize: 12
+  reloadDuration: 1.5
+  equipDuration: 0.4
+  holsterDuration: 0.3
+  aimFOV: 50
+  aimMoveSpeedMultiplier: 0.6
+  acceptedAmmo:
+  - {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
+  defaultAmmo: {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
+  viewModelPrefab: {fileID: 0}
+  animatorOverride: {fileID: 0}
+  allowedAttachmentSlots: 3

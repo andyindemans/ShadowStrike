@@ -713,6 +713,63 @@ Transform:
   - {fileID: 2103294002}
   m_Father: {fileID: 544570091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &418334411
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1822416636}
+    m_Modifications:
+    - target: {fileID: 100004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_Name
+      value: M1911
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
 --- !u!1 &449023170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,6 +1662,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1032276000}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1086275260 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400004, guid: b812e42521a5a27499e76cc5ed56e3ac, type: 3}
+  m_PrefabInstance: {fileID: 418334411}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1113505388
 GameObject:
   m_ObjectHideFlags: 0
@@ -2345,6 +2407,60 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798069515}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1822416635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1822416636}
+  - component: {fileID: 1822416637}
+  m_Layer: 0
+  m_Name: WeaponPistol
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1822416636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822416635}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3, y: -0.2, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1086275260}
+  m_Father: {fileID: 2050048617}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1822416637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822416635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c69d1e619bc987449cc0425e8a6de7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  data: {fileID: 11400000, guid: 2a91775b223c8cc47b7abea58fac51f9, type: 2}
+  currentAmmo: {fileID: 0}
+  muzzle: {fileID: 0}
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  impactEffect: {fileID: 0}
+  magCount: 0
+  attachments: []
 --- !u!1 &1923601484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2361,6 +2477,9 @@ GameObject:
   - component: {fileID: 1923601491}
   - component: {fileID: 1923601492}
   - component: {fileID: 1923601493}
+  - component: {fileID: 1923601496}
+  - component: {fileID: 1923601495}
+  - component: {fileID: 1923601494}
   m_Layer: 0
   m_Name: PlayerModel
   m_TagString: PlayerModel
@@ -2548,10 +2667,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a756940cd79b0f4cb1bba99211823d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vaultSpeed: 5
+  vaultLerpSpeed: 8
+  vaultForwardReach: 1.5
+  vaultClearance: 0.3
+  vaultMinExitSpeed: 4
   whatIsVaultable:
     serializedVersion: 2
     m_Bits: 251
+  isVaulting: 0
 --- !u!114 &1923601493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2681,11 +2804,254 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: a1b2c3d4-e5f6-7890-abcd-ef1234567890
     m_ActionName: 'Movement/MouseLook[/Mouse/delta]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aa000001-0000-4000-8000-000000000001
+    m_ActionName: 'Weapon/Reload[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aa000002-0000-4000-8000-000000000002
+    m_ActionName: 'Weapon/Aim[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aa000003-0000-4000-8000-000000000003
+    m_ActionName: 'Weapon/SwitchWeapon[/Keyboard/1,/Keyboard/2,/Mouse/scroll/y]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: aa000004-0000-4000-8000-000000000004
+    m_ActionName: 'Weapon/Inspect[/Keyboard/t]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1923601494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923601484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3973bb2d1502a42bbaf589cf4c4de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  movement: {fileID: 1923601491}
+  inventory: {fileID: 1923601495}
+  viewCamera: {fileID: 815337478}
+  firingWhileSprintingAllowed: 0
+  aimFOVLerpSpeed: 12
+--- !u!114 &1923601495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923601484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd49811e3a193404c97cb2b1d4c813c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+  slots:
+  - {fileID: 1822416637}
+  - {fileID: 0}
+  activeSlot: 0
+  reserve: {fileID: 0}
+--- !u!114 &1923601496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1923601484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b10b00a26e8a75244b3827a7c1f08789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoReserve
+  startingAmmo:
+  - ammo: {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
+    amount: 60
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
+  - ammo: {fileID: 0}
+    amount: 0
 --- !u!1 &2004729798
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,6 +3180,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 815337479}
+  - {fileID: 1822416636}
   m_Father: {fileID: 502119230}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!114 &2050048618
