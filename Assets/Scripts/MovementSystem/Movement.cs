@@ -3,7 +3,6 @@ using UnityEngine;
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 
 public class Movement : MonoBehaviour
 {
@@ -137,9 +136,9 @@ public class Movement : MonoBehaviour
         if ((isWallRight || isWallLeft) && wallrunButtonHeld) Wallrun();
 
         PlayRunAnimation();
-        isRunning = rb.velocity.magnitude > 0.5f;
+        isRunning = rb.linearVelocity.magnitude > 0.5f;
         isCrouched = grounded && crouching;
-        if(isSliding) isSliding = rb.velocity.magnitude > 3f;
+        if(isSliding) isSliding = rb.linearVelocity.magnitude > 3f;
 
         AnimatePlayerScale();
     }
@@ -253,7 +252,7 @@ public class Movement : MonoBehaviour
         //Slow down sliding
         if (isSliding)
         {
-            rb.AddForce(runSpeed * Time.deltaTime * -rb.velocity.normalized * slideCounterMovement);
+            rb.AddForce(runSpeed * Time.deltaTime * -rb.linearVelocity.normalized * slideCounterMovement);
             return;
         }
 
@@ -268,11 +267,11 @@ public class Movement : MonoBehaviour
         }
 
         //Limit diagonal running
-        if (Mathf.Sqrt((Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2))) > maxSpeed)
+        if (Mathf.Sqrt((Mathf.Pow(rb.linearVelocity.x, 2) + Mathf.Pow(rb.linearVelocity.z, 2))) > maxSpeed)
         {
-            float fallspeed = rb.velocity.y;
-            Vector3 n = rb.velocity.normalized * maxSpeed;
-            rb.velocity = new Vector3(n.x, fallspeed, n.z);
+            float fallspeed = rb.linearVelocity.y;
+            Vector3 n = rb.linearVelocity.normalized * maxSpeed;
+            rb.linearVelocity = new Vector3(n.x, fallspeed, n.z);
         }
 
     }
@@ -307,7 +306,7 @@ public class Movement : MonoBehaviour
             readyToCrouch = false;
             transform.localScale = crouchPosition;
             crouching = true;
-            isSliding = rb.velocity.magnitude > 5f && crouching;
+            isSliding = rb.linearVelocity.magnitude > 5f && crouching;
 
             //Sliding
             if (isSliding && grounded)
@@ -388,12 +387,12 @@ public class Movement : MonoBehaviour
     public Vector2 FindVelRelativeToLook()
     {
         float lookAngle = orientation.transform.eulerAngles.y;
-        float moveAngle = Mathf.Atan2(rb.velocity.x, rb.velocity.z) * Mathf.Rad2Deg;
+        float moveAngle = Mathf.Atan2(rb.linearVelocity.x, rb.linearVelocity.z) * Mathf.Rad2Deg;
 
         float u = Mathf.DeltaAngle(lookAngle, moveAngle);
         float v = 90 - u;
 
-        float magnitue = rb.velocity.magnitude;
+        float magnitue = rb.linearVelocity.magnitude;
         float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
         float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
 
@@ -411,7 +410,7 @@ public class Movement : MonoBehaviour
             rb.useGravity = false;
             isWallRunning = true;
 
-            if (rb.velocity.magnitude <= maxWallSpeed)
+            if (rb.linearVelocity.magnitude <= maxWallSpeed)
             {
                 //Negate upward motion, but keep forward momentum
                 Vector3 momentum = new Vector3(orientation.forward.x, 0, orientation.forward.z);
