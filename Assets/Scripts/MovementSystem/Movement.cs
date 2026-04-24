@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
 public class Movement : MonoBehaviour
@@ -11,20 +9,23 @@ public class Movement : MonoBehaviour
     public float maxSlopeAngle = 35f;
     public float runSpeed = 6500f;
     public float walkSpeed = 1000f;
+    public float crouchSpeed = 2500f;
     public float sensitivity = 50.0f;
     public Transform playerCam;
     public Transform orientation;
     public float maxSpeed = 7f;
+    public float crouchMaxSpeed = 3f;
     public bool enableHeadBobbing = true;
     public Camera camera; //Use actual Main Camera
 
-    //Crouch
+    //Crouch & Slide
     public bool crouching;
     private bool isCrouched;
-    private bool readyToCrouch = true;
     private Vector3 playerScale;
     private Vector3 crouchPosition = new Vector3(0, 0.5f, 0);
-    private Vector3 standingPosition = new Vector3(0, 1f, 0);
+    public float slideThreshold = 4.5f;
+    public float slideExitSpeed = 1.8f;
+    private float crouchLerpSpeed = 15f;
 
     //Privates
     private bool cancellingGrounded;
@@ -40,10 +41,10 @@ public class Movement : MonoBehaviour
     private float defaultYPos = 0;
     private float timer;
 
-    //Performed inputs
+    //Input
     private Rigidbody rb;
-    private PlayerInput playerInput;
     private MovementSystem movementSystem;
+    public MovementSystem InputSystem => movementSystem;
 
     //Bools
     public bool isSprinting = false;
@@ -52,7 +53,7 @@ public class Movement : MonoBehaviour
 
     //Jumping
     public bool jumping;
-    private bool readyToJump = false;
+    private bool readyToJump = true;
     public float jumpForce = 450f;
 
     //Sliding
@@ -62,7 +63,6 @@ public class Movement : MonoBehaviour
     private Vector3 wallNormalVector;
     private float counterMovement = 0.1f;
     private float threshold = 0.03f;
-    private Vector3 slidePosition = new Vector3(0, 0.3f, 0);
 
     //Wallrunning
     private float wallRunCameraTilt = 0f;
@@ -84,13 +84,11 @@ public class Movement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
 
-        //Call methods on input performed
         movementSystem = new MovementSystem();
         movementSystem.Movement.Enable();
 
-        //Jumping and Double Jumping
+        //Jumping — suppressed when near a wall (Space used for wallrun there)
         movementSystem.Movement.Jump.performed += Jump;
 
         //Crouching & Sliding
@@ -98,25 +96,23 @@ public class Movement : MonoBehaviour
         movementSystem.Movement.Crouch.canceled += StopCrouch;
 
         //Wallrunning
-        movementSystem.Movement.Wallrun.performed += ctx => wallrunButtonHeld = true ;
+        movementSystem.Movement.Wallrun.performed += ctx => wallrunButtonHeld = true;
         movementSystem.Movement.Wallrun.canceled += WallJump;
-
-        //Head Bobbing
-        defaultYPos = camera.transform.localPosition.y;
 
         //Sprinting
         movementSystem.Movement.Sprint.performed += context => isSprinting = true;
         movementSystem.Movement.Sprint.canceled += context => isSprinting = false;
+
+        //Head Bobbing
+        defaultYPos = camera.transform.localPosition.y;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         playerScale = transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        Invoke(nameof(ResetJump), 1.0f);
         animator = GetComponent<Animator>();
     }
 
@@ -128,33 +124,17 @@ public class Movement : MonoBehaviour
 
     }
 
-    //FixedUpdate is for RigidBodies
     private void FixedUpdate()
     {
         if (!isWallRunning) Move();
         if (enableHeadBobbing) HeadBob();
         if ((isWallRight || isWallLeft) && wallrunButtonHeld) Wallrun();
 
-        PlayRunAnimation();
         isRunning = rb.linearVelocity.magnitude > 0.5f;
         isCrouched = grounded && crouching;
-        if(isSliding) isSliding = rb.linearVelocity.magnitude > 3f;
+        if (isSliding) isSliding = rb.linearVelocity.magnitude > slideExitSpeed;
 
         AnimatePlayerScale();
-    }
-
-
-    private void PlayRunAnimation()
-    {
-        //if (allowRunAnimation)
-        //{
-        //    animator.SetBool("isRunning", true);
-        //}
-
-        //if (!allowRunAnimation)
-        //{
-        //    animator.SetBool("isRunning", false);
-        //}
     }
 
 
@@ -203,67 +183,66 @@ public class Movement : MonoBehaviour
     //Movement Functions #========================#
     public void Move()
     {
-        //Extra gravity
         rb.AddForce(Vector3.down * Time.fixedDeltaTime * 10);
 
-        //Detect movement input
         Vector2 inputVector = movementSystem.Movement.Walk.ReadValue<Vector2>();
-        
 
-        //Find actual velocity relative to where player is looking
         Vector2 mag = FindVelRelativeToLook();
         float xMag = mag.x, yMag = mag.y;
 
-        //Counteract sliding and sloppy movement
         CounterMovement(inputVector.x, inputVector.y, mag);
 
-        float speedPenalty = 1f;
-        if (isCrouched) speedPenalty = 3f;
+        // Determine speed and velocity cap based on state
+        float activeSpeed;
+        float activeMaxSpeed;
+        if (isCrouched && !isSliding)
+        {
+            activeSpeed = crouchSpeed;
+            activeMaxSpeed = crouchMaxSpeed;
+        }
+        else if (isSprinting && !isCrouched)
+        {
+            activeSpeed = runSpeed;
+            activeMaxSpeed = maxSpeed;
+        }
+        else
+        {
+            activeSpeed = walkSpeed;
+            activeMaxSpeed = maxSpeed;
+        }
 
-        //If speed is larger than maxspeed, cancel out the input so you don't go over max speed
-        if (inputVector.x > 0 && xMag > (maxSpeed / speedPenalty)) inputVector.x = 0;
-        if (inputVector.x < 0 && xMag < -(maxSpeed / speedPenalty)) inputVector.x = 0;
-        if (inputVector.y > 0 && yMag > (maxSpeed / speedPenalty)) inputVector.y = 0;
-        if (inputVector.y < 0 && yMag < -(maxSpeed / speedPenalty)) inputVector.y = 0;
+        if (inputVector.x > 0 && xMag > activeMaxSpeed) inputVector.x = 0;
+        if (inputVector.x < 0 && xMag < -activeMaxSpeed) inputVector.x = 0;
+        if (inputVector.y > 0 && yMag > activeMaxSpeed) inputVector.y = 0;
+        if (inputVector.y < 0 && yMag < -activeMaxSpeed) inputVector.y = 0;
 
         float multiplier = 1f;
-
-        // Movement while mid-air
         if (!grounded && !isWallRunning) multiplier = 0.1f;
 
-        // Disable movement while sliding
         if (isSliding) return;
 
-        // Check for Sprint input
-        float speed = walkSpeed;
-        if (isSprinting) speed = runSpeed;
-
-        //Apply forces to move player
         direction = new Vector3(inputVector.x, 0, inputVector.y);
         direction = orientation.transform.TransformDirection(direction);
-        rb.AddForce(direction * speed * Time.fixedDeltaTime * multiplier, ForceMode.Force);
-
+        rb.AddForce(direction * activeSpeed * Time.fixedDeltaTime * multiplier, ForceMode.Force);
     }
 
     private void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!grounded || jumping) return;
 
-        //Slow down sliding
         if (isSliding)
         {
-            rb.AddForce(runSpeed * Time.deltaTime * -rb.linearVelocity.normalized * slideCounterMovement);
+            rb.AddForce(runSpeed * Time.fixedDeltaTime * -rb.linearVelocity.normalized * slideCounterMovement);
             return;
         }
 
-        //Counter movement
         if (Math.Abs(mag.x) > threshold && Math.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
-            rb.AddForce(runSpeed * orientation.transform.right * Time.deltaTime * -mag.x * counterMovement);
+            rb.AddForce(runSpeed * orientation.transform.right * Time.fixedDeltaTime * -mag.x * counterMovement);
         }
         if (Math.Abs(mag.y) > threshold && Math.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
         {
-            rb.AddForce(runSpeed * orientation.transform.forward * Time.deltaTime * -mag.y * counterMovement);
+            rb.AddForce(runSpeed * orientation.transform.forward * Time.fixedDeltaTime * -mag.y * counterMovement);
         }
 
         //Limit diagonal running
@@ -278,6 +257,9 @@ public class Movement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
+        // Space also triggers wallrun — suppress jump when a wall is detected
+        if (isWallRight || isWallLeft) return;
+
         if (grounded && readyToJump && !isWallRunning && !crouching)
         {
             Vector3 jump = new Vector3(0, jumpForce * 0.65f, 0);
@@ -301,46 +283,34 @@ public class Movement : MonoBehaviour
 
     public void StartCrouch(InputAction.CallbackContext context)
     {
-        if (readyToCrouch)
-        {
-            readyToCrouch = false;
-            transform.localScale = crouchPosition;
-            crouching = true;
-            isSliding = rb.linearVelocity.magnitude > 5f && crouching;
+        crouching = true;
+        // Enter slide only when moving fast enough (sprint into crouch), otherwise crouch-walk
+        isSliding = rb.linearVelocity.magnitude > slideThreshold && grounded;
 
-            //Sliding
-            if (isSliding && grounded)
-            {
-                rb.AddForce(orientation.transform.forward * slideForce);
-            }
+        if (isSliding)
+        {
+            rb.AddForce(orientation.transform.forward * slideForce);
         }
-        else return;
     }
 
     public void StopCrouch(InputAction.CallbackContext context)
     {
-        transform.localScale = playerScale;
         crouching = false;
-        Invoke(nameof(ResetCrouch), 0.3f);
-    }
-
-    private void ResetCrouch()
-    {
-        readyToCrouch = true;
     }
 
     private void AnimatePlayerScale()
     {
-        
+        Vector3 targetScale = crouching ? crouchPosition : playerScale;
+        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, crouchLerpSpeed * Time.fixedDeltaTime);
     }
 
 
     private void Look()
     {
-        float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
-        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
+        Vector2 mouseDelta = movementSystem.Movement.MouseLook.ReadValue<Vector2>();
+        float mouseX = mouseDelta.x * sensitivity * Time.deltaTime * sensMultiplier;
+        float mouseY = mouseDelta.y * sensitivity * Time.deltaTime * sensMultiplier;
 
-        //Find current look rotation
         Vector3 rot = playerCam.transform.localRotation.eulerAngles;
         desiredX = rot.y + mouseX;
 
@@ -392,9 +362,9 @@ public class Movement : MonoBehaviour
         float u = Mathf.DeltaAngle(lookAngle, moveAngle);
         float v = 90 - u;
 
-        float magnitue = rb.linearVelocity.magnitude;
-        float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
-        float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
+        float magnitude = rb.linearVelocity.magnitude;
+        float yMag = magnitude * Mathf.Cos(u * Mathf.Deg2Rad);
+        float xMag = magnitude * Mathf.Cos(v * Mathf.Deg2Rad);
 
         return new Vector2(xMag, yMag);
     }
@@ -442,6 +412,8 @@ public class Movement : MonoBehaviour
 
         if (isWallRunning)
         {
+            StopWallRun(); // restores gravity immediately
+
             readyToJump = false;
             Vector3 jump = new Vector3(0, jumpForce * 0.5f, 0);
 

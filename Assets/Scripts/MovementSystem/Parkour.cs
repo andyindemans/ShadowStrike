@@ -1,56 +1,40 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Parkour : MonoBehaviour
 {
     //Assignables #===============================#
     public float vaultSpeed = 5f;
     public LayerMask whatIsVaultable;
-    public bool isWallVaultable;
 
     //Privates
     private Rigidbody rb;
-    private PlayerInput playerInput;
-    private MovementSystem movementSystem;
     private Movement movementParams;
     private float playerHeight;
     private Transform orientation;
 
     //Bools
     private bool grounded;
-    private bool parkourButtonHeld;
     private bool isVaulting = false;
+    private bool isWallVaultable;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
-
-        //Call methods on input performed
-        movementSystem = new MovementSystem();
-        movementSystem.Movement.Enable();
-
-        //Parkour
-        movementSystem.Movement.Parkour.performed += context => parkourButtonHeld = true;
-        movementSystem.Movement.Parkour.canceled += context => parkourButtonHeld = false;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //Load Movement component
         movementParams = GetComponent<Movement>();
-
-        //Get size of RigidBody
-        playerHeight = rb.GetComponent<Renderer>().bounds.size.y * 2.5f;
+        orientation = movementParams.orientation;
+        playerHeight = GetComponent<Renderer>().bounds.size.y * 2.5f;
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckForWall();
-        if (parkourButtonHeld) Vault();
+        if (isWallVaultable && !isVaulting) Vault();
     }
 
     //Used for RigidBodies
@@ -58,33 +42,28 @@ public class Parkour : MonoBehaviour
     {
         grounded = movementParams.grounded;
         orientation = movementParams.orientation;
-        if (!grounded && isVaulting)
-        {
-            Invoke(nameof(ResetCrouch), 1f);
-            isVaulting = false;
-        }
     }
 
 
     //Parkour moves #=============================#
     private void Vault()
     {
-        if (grounded && isWallVaultable)
+        if (grounded)
         {
-            Vector3 vault = new Vector3(orientation.forward.x, playerHeight * 1.5f, 0);
+            // Push player up and forward over the obstacle
+            Vector3 vault = new Vector3(orientation.forward.x, playerHeight * 1.5f, orientation.forward.z);
+            rb.MovePosition(transform.position + vault * Time.fixedDeltaTime * vaultSpeed);
 
-            //Vault over object
-            rb.MovePosition( transform.position + vault * Time.fixedDeltaTime * vaultSpeed);
-            movementSystem.Movement.Crouch.performed += movementParams.StartCrouch;
-
+            movementParams.StartCrouch(default);
             isVaulting = true;
+            Invoke(nameof(StopVaultCrouch), 0.5f);
         }
-
     }
 
-    private void ResetCrouch()
+    private void StopVaultCrouch()
     {
-        movementSystem.Movement.Crouch.canceled += movementParams.StopCrouch;
+        movementParams.StopCrouch(default);
+        isVaulting = false;
     }
 
     private void CheckForWall()

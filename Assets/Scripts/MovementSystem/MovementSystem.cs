@@ -121,27 +121,36 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Wallrun"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""41c720a3-2879-4e4b-9c06-4f12e7ab8bb4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Parkour"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""7153e03b-329a-42ee-98f4-21afd035d1e8"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Sprint"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""65050c08-3beb-4dab-908d-c62b0d3e1311"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseLook"",
+                    ""type"": ""Value"",
+                    ""id"": ""a1b2c3d4-e5f6-7890-abcd-ef1234567890"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -238,23 +247,23 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""af96e70a-e153-48da-9e2c-b2879ce74e4f"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Parkour"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""34eaeb7c-6d54-463e-8b9f-b5eed366fc90"",
                     ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1c2d3e4-f5a6-7890-bcde-f12345678901"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MouseLook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -305,6 +314,7 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
         m_Movement_Wallrun = m_Movement.FindAction("Wallrun", throwIfNotFound: true);
         m_Movement_Parkour = m_Movement.FindAction("Parkour", throwIfNotFound: true);
         m_Movement_Sprint = m_Movement.FindAction("Sprint", throwIfNotFound: true);
+        m_Movement_MouseLook = m_Movement.FindAction("MouseLook", throwIfNotFound: true);
         // Weapon
         m_Weapon = asset.FindActionMap("Weapon", throwIfNotFound: true);
         m_Weapon_Shoot = m_Weapon.FindAction("Shoot", throwIfNotFound: true);
@@ -395,6 +405,7 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Wallrun;
     private readonly InputAction m_Movement_Parkour;
     private readonly InputAction m_Movement_Sprint;
+    private readonly InputAction m_Movement_MouseLook;
     /// <summary>
     /// Provides access to input actions defined in input action map "Movement".
     /// </summary>
@@ -430,6 +441,10 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Movement/Sprint".
         /// </summary>
         public InputAction @Sprint => m_Wrapper.m_Movement_Sprint;
+        /// <summary>
+        /// Provides access to the underlying input action "Movement/MouseLook".
+        /// </summary>
+        public InputAction @MouseLook => m_Wrapper.m_Movement_MouseLook;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -474,6 +489,9 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @MouseLook.started += instance.OnMouseLook;
+            @MouseLook.performed += instance.OnMouseLook;
+            @MouseLook.canceled += instance.OnMouseLook;
         }
 
         /// <summary>
@@ -503,6 +521,9 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @MouseLook.started -= instance.OnMouseLook;
+            @MouseLook.performed -= instance.OnMouseLook;
+            @MouseLook.canceled -= instance.OnMouseLook;
         }
 
         /// <summary>
@@ -694,6 +715,13 @@ public partial class @MovementSystem: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MouseLook" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMouseLook(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Weapon" which allows adding and removing callbacks.
