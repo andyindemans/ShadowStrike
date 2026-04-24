@@ -39,6 +39,7 @@ public class Movement : MonoBehaviour
     [Range(0.01f, 0.1f)] public float runBobAmount = 0.05f;
     private float defaultYPos = 0;
     private float timer;
+    [HideInInspector] public float bobOffset;   // current head-bob Y delta from defaultYPos — read by WeaponSway
 
     //Input
     private Rigidbody rb;
@@ -358,7 +359,8 @@ public class Movement : MonoBehaviour
         if (isRunning)
         {
             timer += Time.deltaTime * runBobSpeed;
-            camera.transform.localPosition = new Vector3(camera.transform.localPosition.x, defaultYPos + Mathf.Sin(timer) * runBobAmount, camera.transform.localPosition.z);
+            bobOffset = Mathf.Sin(timer) * runBobAmount;
+            camera.transform.localPosition = new Vector3(camera.transform.localPosition.x, defaultYPos + bobOffset, camera.transform.localPosition.z);
             allowRunAnimation = true;
         } else
         {
