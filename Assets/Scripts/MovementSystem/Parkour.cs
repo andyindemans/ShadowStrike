@@ -3,7 +3,10 @@ using UnityEngine;
 public class Parkour : MonoBehaviour
 {
     //Assignables #===============================#
-    public float vaultSpeed = 5f;
+    public float vaultLerpSpeed = 8f;
+    public float vaultForwardReach = 1.5f;
+    public float vaultClearance = 0.3f;
+    public float vaultMinExitSpeed = 4f;
     public LayerMask whatIsVaultable;
 
     //Privates
@@ -12,10 +15,13 @@ public class Parkour : MonoBehaviour
     private float playerHeight;
     private float characterHeight;
     private Transform orientation;
+    private Vector3 vaultTargetPos;
+    private float lastObstacleTopY;
+    private float preVaultSpeed;
 
     //Bools
     private bool grounded;
-    private bool isVaulting = false;
+    public bool isVaulting = false;
     private bool isWallVaultable;
 
     void Awake()
@@ -45,28 +51,59 @@ public class Parkour : MonoBehaviour
         grounded = movementParams.grounded;
         orientation = movementParams.orientation;
 
+        if (isVaulting) { TickVault(); return; }
+
         CheckForWall();
-        if (movementParams.isSprinting && isWallVaultable && !isVaulting) Vault();
+        if (movementParams.isSprinting && isWallVaultable) StartVault();
     }
 
 
     //Parkour moves #=============================#
-    private void Vault()
+    private void StartVault()
     {
-        if (grounded)
-        {
-            // Push player up and forward over the obstacle
-            Vector3 vault = new Vector3(orientation.forward.x, playerHeight * 1.5f, orientation.forward.z);
-            rb.MovePosition(transform.position + vault * Time.fixedDeltaTime * vaultSpeed);
+        if (!grounded) return;
 
-            movementParams.StartCrouch(default);
-            isVaulting = true;
-            Invoke(nameof(StopVaultCrouch), 0.5f);
-        }
+        Vector3 forwardFlat = new Vector3(orientation.forward.x, 0f, orientation.forward.z).normalized;
+        vaultTargetPos = ComputeVaultTarget(forwardFlat);
+
+        preVaultSpeed = rb.linearVelocity.magnitude;
+        rb.linearVelocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        movementParams.StartCrouch(default);
+        isVaulting = true;
     }
 
-    private void StopVaultCrouch()
+    // Casts straight down from the forward-reach X/Z above the obstacle top
+    // to find the actual landing surface — whether that's the top of a thick
+    // obstacle or the ground on the far side of a thin one.
+    private Vector3 ComputeVaultTarget(Vector3 forwardFlat)
     {
+        Vector3 target = transform.position + forwardFlat * vaultForwardReach;
+        Vector3 scanOrigin = new Vector3(target.x, lastObstacleTopY + 2f, target.z);
+
+        float surfaceY = lastObstacleTopY;
+        if (Physics.Raycast(scanOrigin, Vector3.down, out RaycastHit hit, 20f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+            surfaceY = hit.point.y;
+
+        target.y = surfaceY + characterHeight * 0.5f + vaultClearance;
+        return target;
+    }
+
+    private void TickVault()
+    {
+        Vector3 next = Vector3.Lerp(transform.position, vaultTargetPos, vaultLerpSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(next);
+
+        if (Vector3.Distance(transform.position, vaultTargetPos) < 0.05f)
+            EndVault();
+    }
+
+    private void EndVault()
+    {
+        rb.isKinematic = false;
+        Vector3 exitForward = new Vector3(orientation.forward.x, 0f, orientation.forward.z).normalized;
+        rb.linearVelocity = exitForward * Mathf.Max(preVaultSpeed, vaultMinExitSpeed);
         movementParams.StopCrouch(default);
         isVaulting = false;
     }
@@ -88,6 +125,7 @@ public class Parkour : MonoBehaviour
             float obstacleTopY = hit.collider.bounds.max.y;
             float obstacleHeight = obstacleTopY - feetY;
             isWallVaultable = obstacleHeight > 0.1f && obstacleTopY <= maxObstacleY;
+            if (isWallVaultable) lastObstacleTopY = obstacleTopY;
             if (movementParams.isSprinting)
                 Debug.Log($"[Parkour] hit '{hit.collider.name}' layer={LayerMask.LayerToName(hit.collider.gameObject.layer)} obstacleHeight={obstacleHeight:F2} max={characterHeight * 0.45f:F2} vaultable={isWallVaultable}");
         }
