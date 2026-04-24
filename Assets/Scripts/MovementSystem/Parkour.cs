@@ -10,6 +10,7 @@ public class Parkour : MonoBehaviour
     private Rigidbody rb;
     private Movement movementParams;
     private float playerHeight;
+    private float characterHeight;
     private Transform orientation;
 
     //Bools
@@ -28,13 +29,14 @@ public class Parkour : MonoBehaviour
         movementParams = GetComponent<Movement>();
         orientation = movementParams.orientation;
         playerHeight = GetComponent<Renderer>().bounds.size.y * 2.5f;
+        characterHeight = GetComponent<Renderer>().bounds.size.y;
+        Debug.Log($"[Parkour] characterHeight = {characterHeight} (from Renderer '{GetComponent<Renderer>().name}'). Expected ~2 for a standard capsule.");
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckForWall();
-        if (isWallVaultable && !isVaulting) Vault();
+        
     }
 
     //Used for RigidBodies
@@ -42,6 +44,9 @@ public class Parkour : MonoBehaviour
     {
         grounded = movementParams.grounded;
         orientation = movementParams.orientation;
+
+        CheckForWall();
+        if (movementParams.isSprinting && isWallVaultable && !isVaulting) Vault();
     }
 
 
@@ -68,8 +73,29 @@ public class Parkour : MonoBehaviour
 
     private void CheckForWall()
     {
-        Vector3 rayHeight = new Vector3(transform.position.x, transform.position.y - 0.7f, transform.position.z);
-        isWallVaultable = Physics.Raycast(rayHeight, orientation.forward, 0.75f, whatIsVaultable);
+        float feetY = transform.position.y - characterHeight * 0.5f;
+        float maxObstacleY = feetY + characterHeight * 0.65f;
 
+        // Forward ray at ~15% height (knee/shin) to detect any obstacle directly in front
+        Vector3 rayOrigin = new Vector3(transform.position.x, feetY + characterHeight * 0.15f, transform.position.z);
+        const float reach = 1.0f;
+
+        Debug.DrawRay(rayOrigin, orientation.forward * reach, Color.yellow);
+
+        if (Physics.Raycast(rayOrigin, orientation.forward, out RaycastHit hit, reach, whatIsVaultable, QueryTriggerInteraction.Ignore))
+        {
+            // Read the obstacle's AABB top to decide if it's below the 45% threshold
+            float obstacleTopY = hit.collider.bounds.max.y;
+            float obstacleHeight = obstacleTopY - feetY;
+            isWallVaultable = obstacleHeight > 0.1f && obstacleTopY <= maxObstacleY;
+            if (movementParams.isSprinting)
+                Debug.Log($"[Parkour] hit '{hit.collider.name}' layer={LayerMask.LayerToName(hit.collider.gameObject.layer)} obstacleHeight={obstacleHeight:F2} max={characterHeight * 0.45f:F2} vaultable={isWallVaultable}");
+        }
+        else
+        {
+            isWallVaultable = false;
+            if (movementParams.isSprinting)
+                Debug.Log($"[Parkour] no forward obstacle within {reach}m at knee height");
+        }
     }
 }
