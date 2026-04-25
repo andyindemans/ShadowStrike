@@ -34,6 +34,7 @@ public class WeaponData : ScriptableObject
     public float holsterDuration = 0.3f;
     public float aimFOV = 50f;
     public float aimMoveSpeedMultiplier = 0.6f;
+    public ADSProfile adsProfile;
 
     //Ammo #=======================#
     public List<AmmoType> acceptedAmmo = new List<AmmoType>();

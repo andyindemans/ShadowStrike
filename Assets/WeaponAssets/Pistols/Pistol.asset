@@ -39,6 +39,10 @@ MonoBehaviour:
   holsterDuration: 0.3
   aimFOV: 50
   aimMoveSpeedMultiplier: 0.4
+  adsProfile:
+    aimPositionOffset: {x: -0.08, y: -0.05, z: 0.12}
+    aimRotationOffset: {x: 0, y: 0, z: 0}
+    adsLerpSpeed: 12
   acceptedAmmo:
   - {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
   defaultAmmo: {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}

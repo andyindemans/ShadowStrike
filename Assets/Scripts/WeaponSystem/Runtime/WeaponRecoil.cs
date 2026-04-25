@@ -65,8 +65,6 @@ public class WeaponRecoil : MonoBehaviour
 
     private void Update()
     {
-        // Lazy resubscribe — robust to PlayerInventory's start-order quirk where it activates
-        // the initial weapon without firing OnWeaponChanged.
         Weapon active = inventory != null ? inventory.Active : null;
         if (active != subscribedWeapon)
         {
@@ -105,7 +103,6 @@ public class WeaponRecoil : MonoBehaviour
             visualRotTarget = Vector3.Lerp(visualRotTarget, Vector3.zero, r);
         }
 
-        //Apply
         if (movement != null)
         {
             movement.recoilPitchOffset = currentPitchOffset;
