@@ -8,14 +8,14 @@ public class Movement : MonoBehaviour
     public float maxSlopeAngle = 35f;
     public float runSpeed = 6500f;
     public float walkSpeed = 1000f;
-    public float crouchSpeed = 2500f;
+    public float crouchSpeed = 2000f;
     public float sensitivity = 50.0f;
     public Transform playerCam;
     public Transform orientation;
     public float maxSpeed = 7f;
     public float crouchMaxSpeed = 3f;
     public bool enableHeadBobbing = true;
-    public Camera camera; //Use actual Main Camera
+    public Camera camera;
 
     //Crouch & Slide
     public bool crouching;
@@ -31,6 +31,10 @@ public class Movement : MonoBehaviour
     private float desiredX;
     private float sensMultiplier = 1f;
     private float xRotation;
+
+    //Recoil — written by WeaponRecoil each frame; added on top of mouse-driven angles in Look().
+    [HideInInspector] public float recoilPitchOffset;
+    [HideInInspector] public float recoilYawOffset;
     private Vector3 direction;
     private bool isRunning;
 
@@ -122,6 +126,9 @@ public class Movement : MonoBehaviour
 
         //Head Bobbing
         defaultYPos = camera.transform.localPosition.y;
+
+        //Seed yaw accumulator from current camera rotation so spawn orientation is preserved.
+        desiredX = playerCam.localRotation.eulerAngles.y;
     }
 
     void Start()
@@ -324,15 +331,14 @@ public class Movement : MonoBehaviour
         float mouseX = mouseDelta.x * sensitivity * Time.deltaTime * sensMultiplier;
         float mouseY = mouseDelta.y * sensitivity * Time.deltaTime * sensMultiplier;
 
-        Vector3 rot = playerCam.transform.localRotation.eulerAngles;
-        desiredX = rot.y + mouseX;
-
-        //Rotate, and also make sure we dont over- or under-rotate.
+        //Accumulate mouse intent. Recoil rides on top via recoilPitchOffset / recoilYawOffset
+        //so it can recover toward the player's intended aim without losing player input.
+        desiredX += mouseX;
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 65f);
 
         //Perform the rotations
-        playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, wallRunCameraTilt);
+        playerCam.transform.localRotation = Quaternion.Euler(xRotation + recoilPitchOffset, desiredX + recoilYawOffset, wallRunCameraTilt);
         orientation.transform.localRotation = Quaternion.Euler(0, desiredX, 0);
 
         //Wallrunning camera tilt

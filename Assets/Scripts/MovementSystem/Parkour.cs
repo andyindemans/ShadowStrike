@@ -36,7 +36,6 @@ public class Parkour : MonoBehaviour
         orientation = movementParams.orientation;
         playerHeight = GetComponent<Renderer>().bounds.size.y * 2.5f;
         characterHeight = GetComponent<Renderer>().bounds.size.y;
-        Debug.Log($"[Parkour] characterHeight = {characterHeight} (from Renderer '{GetComponent<Renderer>().name}'). Expected ~2 for a standard capsule.");
     }
 
     // Update is called once per frame
@@ -126,14 +125,10 @@ public class Parkour : MonoBehaviour
             float obstacleHeight = obstacleTopY - feetY;
             isWallVaultable = obstacleHeight > 0.1f && obstacleTopY <= maxObstacleY;
             if (isWallVaultable) lastObstacleTopY = obstacleTopY;
-            if (movementParams.isSprinting)
-                Debug.Log($"[Parkour] hit '{hit.collider.name}' layer={LayerMask.LayerToName(hit.collider.gameObject.layer)} obstacleHeight={obstacleHeight:F2} max={characterHeight * 0.45f:F2} vaultable={isWallVaultable}");
         }
         else
         {
             isWallVaultable = false;
-            if (movementParams.isSprinting)
-                Debug.Log($"[Parkour] no forward obstacle within {reach}m at knee height");
         }
     }
 }

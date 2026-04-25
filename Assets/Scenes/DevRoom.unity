@@ -1359,7 +1359,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1822416636}
   m_Father: {fileID: 2050048617}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &815337480
@@ -2371,13 +2372,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822416635}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: -0.2, z: 0.6}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1499997, y: -0.20000005, z: 0.60000044}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1849456484}
-  m_Father: {fileID: 2050048617}
+  m_Father: {fileID: 815337479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1822416637
 MonoBehaviour:
@@ -2413,9 +2414,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSway
   movement: {fileID: 1923601491}
-  bobAmount: 0.005
+  bobAmount: 0.015
   bobSpeed: 12
-  moveThreshold: 0.2
+  moveThreshold: 0.5
   smoothing: 12
 --- !u!1 &1849456483
 GameObject:
@@ -2706,6 +2707,7 @@ MonoBehaviour:
   slideThreshold: 4.5
   slideExitSpeed: 1.8
   runBobAmount: 0.05
+  bobOffset: 0
   isSprinting: 0
   grounded: 0
   isSliding: 0
@@ -3248,7 +3250,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 815337479}
-  - {fileID: 1822416636}
   m_Father: {fileID: 502119230}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!114 &2050048618

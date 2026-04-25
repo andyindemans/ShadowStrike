@@ -19,6 +19,7 @@ public class WeaponData : ScriptableObject
     public float fireRate = 6f;          // rounds per second
     public float range = 200f;           // used by hitscan
     public float baseRecoil = 1f;
+    public RecoilProfile recoilProfile;
 
     //Spread (degrees) #===========#
     public float hipSpread = 3f;
