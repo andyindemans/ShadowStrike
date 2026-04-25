@@ -13,6 +13,8 @@ public struct WeaponStats
     public float fireRate;
     public RecoilProfile recoilProfile;
     public ADSProfile adsProfile;
+    public SprintPoseProfile sprintPoseProfile;
+    public bool oneHanded;
 
     public static WeaponStats Resolve(WeaponData data, IReadOnlyList<AttachmentData> attachments, AmmoType ammo)
     {
@@ -29,6 +31,8 @@ public struct WeaponStats
         s.fireRate = data.fireRate;
         s.recoilProfile = data.recoilProfile;
         s.adsProfile = data.adsProfile;
+        s.sprintPoseProfile = data.sprintPoseProfile;
+        s.oneHanded = data.oneHanded;
 
         if (attachments == null || attachments.Count == 0) return s;
 

@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d4a359981ce25548aec8aa409501dde, type: 3}
-  m_Name: Pistol
+  m_Name: Shotgun
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  id: pistol
-  displayName: Pistol
+  id: shotgun
+  displayName: Shotgun
   firingMode: 0
-  fireRate: 6
+  fireRate: 2
   range: 200
   baseRecoil: 1
   recoilProfile:
-    verticalKick: 1.5
+    verticalKick: 5
     verticalKickVariance: 0.5
     horizontalKick: 1.2
     horizontalBias: 0
-    recoveryDelay: 0
-    recoverySpeed: 12
+    recoveryDelay: 0.5
+    recoverySpeed: 4
     recoveryFraction: 1
     aimRecoilMultiplier: 0.006
-    visualPositionKick: {x: -0.1, y: 0.15, z: -0.04}
+    visualPositionKick: {x: -0.1, y: 0.35, z: -0.04}
     visualRotationKick: {x: -6, y: 0, z: 0}
     visualSnapSpeed: 0
     visualReturnSpeed: 0
   hipSpread: 3
   adsSpread: 0.25
-  magSize: 12
+  magSize: 8
   reloadDuration: 1.5
   equipDuration: 0.4
   holsterDuration: 0.3
@@ -43,17 +43,17 @@ MonoBehaviour:
     aimPositionOffset: {x: -0.15, y: 0.15, z: 0}
     aimRotationOffset: {x: 0, y: 2, z: 0}
     adsLerpSpeed: 12
-  oneHanded: 1
+  oneHanded: 0
   sprintPoseProfile:
-    sprintPositionOffset: {x: 0, y: -0.5, z: 0}
-    sprintRotationOffset: {x: -75, y: 0, z: 0}
-    bobPositionAmplitude: {x: 0, y: 0.005, z: 0}
-    bobRotationAmplitude: {x: 2, y: 0, z: 1}
-    bobFrequency: 2.4
-    lerpSpeed: 12
+    sprintPositionOffset: {x: 0.5, y: -0.08, z: 0.4}
+    sprintRotationOffset: {x: 15, y: -85, z: -25}
+    bobPositionAmplitude: {x: 0, y: 0.008, z: 0}
+    bobRotationAmplitude: {x: 3, y: 0, z: 1}
+    bobFrequency: 2.2
+    lerpSpeed: 10
   acceptedAmmo:
-  - {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
-  defaultAmmo: {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
+  - {fileID: 11400000, guid: 72bb1dc0fc74fdb49b83c14a2b6a30f2, type: 2}
+  defaultAmmo: {fileID: 11400000, guid: 72bb1dc0fc74fdb49b83c14a2b6a30f2, type: 2}
   viewModelPrefab: {fileID: 0}
   animatorOverride: {fileID: 0}
-  allowedAttachmentSlots: 3
+  allowedAttachmentSlots: -1

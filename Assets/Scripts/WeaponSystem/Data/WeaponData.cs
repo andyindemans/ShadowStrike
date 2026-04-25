@@ -35,6 +35,8 @@ public class WeaponData : ScriptableObject
     public float aimFOV = 50f;
     public float aimMoveSpeedMultiplier = 0.6f;
     public ADSProfile adsProfile;
+    public bool oneHanded;
+    public SprintPoseProfile sprintPoseProfile;
 
     //Ammo #=======================#
     public List<AmmoType> acceptedAmmo = new List<AmmoType>();

@@ -51,7 +51,8 @@ public class Movement : MonoBehaviour
     public MovementSystem InputSystem => movementSystem;
 
     //Bools
-    public bool isSprinting = false;
+    private bool sprintInputHeld;
+    public bool isSprinting => sprintInputHeld && grounded && !isWallRunning && !isSliding && !crouching;
     public bool grounded;
     public bool isSliding;
 
@@ -121,8 +122,8 @@ public class Movement : MonoBehaviour
         movementSystem.Movement.Wallrun.canceled += WallJump;
 
         //Sprinting
-        movementSystem.Movement.Sprint.performed += context => isSprinting = true;
-        movementSystem.Movement.Sprint.canceled += context => isSprinting = false;
+        movementSystem.Movement.Sprint.performed += context => sprintInputHeld = true;
+        movementSystem.Movement.Sprint.canceled += context => sprintInputHeld = false;
 
         //Head Bobbing
         defaultYPos = camera.transform.localPosition.y;
