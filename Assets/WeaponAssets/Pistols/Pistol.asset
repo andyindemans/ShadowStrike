@@ -18,6 +18,19 @@ MonoBehaviour:
   fireRate: 6
   range: 200
   baseRecoil: 1
+  recoilProfile:
+    verticalKick: 1.5
+    verticalKickVariance: 0.5
+    horizontalKick: 1.2
+    horizontalBias: 0
+    recoveryDelay: 0
+    recoverySpeed: 12
+    recoveryFraction: 1
+    aimRecoilMultiplier: 0.006
+    visualPositionKick: {x: 0, y: 0, z: -0.04}
+    visualRotationKick: {x: -6, y: 0, z: 0}
+    visualSnapSpeed: 0
+    visualReturnSpeed: 0
   hipSpread: 3
   adsSpread: 0.25
   magSize: 12
@@ -25,7 +38,7 @@ MonoBehaviour:
   equipDuration: 0.4
   holsterDuration: 0.3
   aimFOV: 50
-  aimMoveSpeedMultiplier: 0.6
+  aimMoveSpeedMultiplier: 0.4
   acceptedAmmo:
   - {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
   defaultAmmo: {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
