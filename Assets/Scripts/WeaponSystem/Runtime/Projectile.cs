@@ -34,6 +34,7 @@ public class Projectile : MonoBehaviour
     {
         if (!launched) return;
         if (owner != null && collision.collider.transform.IsChildOf(owner)) return;
+        if (collision.collider.TryGetComponent<Projectile>(out _)) return; // ignore other in-flight projectiles (e.g. shotgun pellets spawning together)
 
         Vector3 point = collision.contactCount > 0 ? collision.GetContact(0).point : transform.position;
         Vector3 normal = collision.contactCount > 0 ? collision.GetContact(0).normal : -transform.forward;

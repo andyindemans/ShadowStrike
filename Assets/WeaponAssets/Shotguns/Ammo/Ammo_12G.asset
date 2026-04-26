@@ -15,7 +15,8 @@ MonoBehaviour:
   id: 12g
   displayName: 12g
   baseDamage: 200
-  muzzleVelocity: 80
+  muzzleVelocity: 120
   gravityMultiplier: 1
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5234839314687764065, guid: 144c9ba6fb119b9489eae1e7113bbebe, type: 3}
+  pelletsPerShot: 8
   reserveCap: 42

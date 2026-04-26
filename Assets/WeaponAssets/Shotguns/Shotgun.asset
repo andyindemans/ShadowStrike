@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   id: shotgun
   displayName: Shotgun
-  firingMode: 0
+  firingMode: 1
   fireRate: 2
   range: 200
   baseRecoil: 1
@@ -32,8 +32,8 @@ MonoBehaviour:
     visualRotationKick: {x: -6, y: 0, z: 0}
     visualSnapSpeed: 0
     visualReturnSpeed: 0
-  hipSpread: 3
-  adsSpread: 0.25
+  hipSpread: 5
+  adsSpread: 1
   magSize: 8
   reloadDuration: 1.5
   equipDuration: 0.4
