@@ -7,17 +7,22 @@ public class ProjectileFirer : IFirer
         if (ctx.ammo == null || ctx.ammo.projectilePrefab == null) return;
 
         float spread = ctx.aiming ? ctx.stats.adsSpread : ctx.stats.hipSpread;
-        Vector3 dir = Spread.Apply(ctx.direction, spread);
+        int pellets = Mathf.Max(1, ctx.ammo.pelletsPerShot);
 
-        Projectile p = Object.Instantiate(
-            ctx.ammo.projectilePrefab,
-            ctx.origin,
-            Quaternion.LookRotation(dir));
+        for (int i = 0; i < pellets; i++)
+        {
+            Vector3 dir = Spread.Apply(ctx.direction, spread);
 
-        p.Launch(
-            dir * ctx.ammo.muzzleVelocity,
-            ctx.stats.damage,
-            ctx.ammo.gravityMultiplier,
-            ctx.owner);
+            Projectile p = Object.Instantiate(
+                ctx.ammo.projectilePrefab,
+                ctx.origin,
+                Quaternion.LookRotation(dir));
+
+            p.Launch(
+                dir * ctx.ammo.muzzleVelocity,
+                ctx.stats.damage,
+                ctx.ammo.gravityMultiplier,
+                ctx.owner);
+        }
     }
 }
