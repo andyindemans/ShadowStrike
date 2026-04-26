@@ -121,11 +121,13 @@ public class WeaponRecoil : MonoBehaviour
 
         var stats = subscribedWeapon.EffectiveStats;
         var profile = stats.recoilProfile;
-        float scalar = stats.recoil * (subscribedWeapon.IsAiming ? Mathf.Max(0f, profile.aimRecoilMultiplier) : 1f);
+        bool aiming = subscribedWeapon.IsAiming;
+        float camMult = stats.recoil * (aiming ? Mathf.Max(0f, profile.aimCameraRecoilMultiplier) : 1f);
+        float visMult = stats.recoil * (aiming ? Mathf.Max(0f, profile.aimVisualRecoilMultiplier) : 1f);
 
-        float vKick = (profile.verticalKick + Random.Range(-profile.verticalKickVariance, profile.verticalKickVariance)) * scalar;
+        float vKick = (profile.verticalKick + Random.Range(-profile.verticalKickVariance, profile.verticalKickVariance)) * camMult;
         float hSign = Random.value < (0.5f + profile.horizontalBias * 0.5f) ? 1f : -1f;
-        float hKick = profile.horizontalKick * hSign * scalar;
+        float hKick = profile.horizontalKick * hSign * camMult;
 
         //Movement.xRotation is inverted (looking up = more negative), so positive vKick maps to negative offset.
         float pitchDelta = -vKick;
@@ -136,8 +138,8 @@ public class WeaponRecoil : MonoBehaviour
         permanentPitch += pitchDelta * (1f - Mathf.Clamp01(profile.recoveryFraction));
         permanentYaw += yawDelta * (1f - Mathf.Clamp01(profile.recoveryFraction));
 
-        visualPosTarget += profile.visualPositionKick * scalar;
-        visualRotTarget += profile.visualRotationKick * scalar;
+        visualPosTarget += profile.visualPositionKick * visMult;
+        visualRotTarget += profile.visualRotationKick * visMult;
 
         lastShotTime = Time.time;
     }
