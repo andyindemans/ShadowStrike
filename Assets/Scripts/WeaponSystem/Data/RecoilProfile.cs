@@ -17,6 +17,7 @@ public struct RecoilProfile
     [Range(0f, 1f)] public float recoveryFraction;  // 1 = full snap back, 0 = permanent kick
 
     //ADS #===============================#
+    [Range(0f, 1f)] public float hipCameraRecoilMultiplier;
     [Range(0f, 1f)] public float aimCameraRecoilMultiplier;
     [Range(0f, 1f)] public float aimVisualRecoilMultiplier;
 

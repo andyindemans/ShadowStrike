@@ -26,12 +26,13 @@ MonoBehaviour:
     recoveryDelay: 0.5
     recoverySpeed: 4
     recoveryFraction: 1
+    hipCameraRecoilMultiplier: 0
     aimCameraRecoilMultiplier: 0.35
     aimVisualRecoilMultiplier: 0.7
-    visualPositionKick: {x: -0.1, y: 0.35, z: -0.04}
-    visualRotationKick: {x: -6, y: 0, z: 0}
-    visualSnapSpeed: 0
-    visualReturnSpeed: 0
+    visualPositionKick: {x: -0.03, y: 0.1, z: -0.04}
+    visualRotationKick: {x: -3, y: 0, z: 0}
+    visualSnapSpeed: 30
+    visualReturnSpeed: 8
   hipSpread: 5
   adsSpread: 1
   magSize: 8
