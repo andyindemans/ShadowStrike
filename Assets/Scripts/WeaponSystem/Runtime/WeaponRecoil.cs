@@ -26,11 +26,11 @@ public class WeaponRecoil : MonoBehaviour
     private float permanentYaw;
     private float lastShotTime = -999f;
 
-    // Visual kick state (local space)
+    // Visual kick state (local space) — spring-driven
     private Vector3 visualPosOffset;     // current
     private Vector3 visualRotOffset;     // current (Euler)
-    private Vector3 visualPosTarget;     // accumulates from each shot, decays back
-    private Vector3 visualRotTarget;
+    private Vector3 visualPosVelocity;
+    private Vector3 visualRotVelocity;
     private Vector3 holderRestPos;
     private Quaternion holderRestRot;
 
@@ -75,6 +75,10 @@ public class WeaponRecoil : MonoBehaviour
             // Don't carry one weapon's permanent climb into another.
             permanentPitch = 0f;
             permanentYaw = 0f;
+            visualPosOffset = Vector3.zero;
+            visualRotOffset = Vector3.zero;
+            visualPosVelocity = Vector3.zero;
+            visualRotVelocity = Vector3.zero;
         }
 
         var profile = subscribedWeapon != null ? subscribedWeapon.EffectiveStats.recoilProfile : default;
@@ -89,19 +93,18 @@ public class WeaponRecoil : MonoBehaviour
             currentYawOffset = Mathf.Lerp(currentYawOffset, permanentYaw, t);
         }
 
-        //Visual kick — snap toward target every frame; target itself decays back to zero after delay
-        if (profile.visualSnapSpeed > 0f)
-        {
-            float s = 1f - Mathf.Exp(-profile.visualSnapSpeed * dt);
-            visualPosOffset = Vector3.Lerp(visualPosOffset, visualPosTarget, s);
-            visualRotOffset = Vector3.Lerp(visualRotOffset, visualRotTarget, s);
-        }
-        if (recovering && profile.visualReturnSpeed > 0f)
-        {
-            float r = 1f - Mathf.Exp(-profile.visualReturnSpeed * dt);
-            visualPosTarget = Vector3.Lerp(visualPosTarget, Vector3.zero, r);
-            visualRotTarget = Vector3.Lerp(visualRotTarget, Vector3.zero, r);
-        }
+        //Visual kick — semi-implicit Euler spring (always continuous, not gated by recovering)
+        float posStiffness = profile.visualPositionStiffness;
+        float rotStiffness = profile.visualRotationStiffness;
+        float damping = profile.visualDampingRatio;
+        float posOmega = Mathf.Sqrt(Mathf.Max(posStiffness, 0f));
+        float rotOmega = Mathf.Sqrt(Mathf.Max(rotStiffness, 0f));
+        Vector3 posAccel = -posStiffness * visualPosOffset - 2f * damping * posOmega * visualPosVelocity;
+        Vector3 rotAccel = -rotStiffness * visualRotOffset - 2f * damping * rotOmega * visualRotVelocity;
+        visualPosVelocity += posAccel * dt;
+        visualRotVelocity += rotAccel * dt;
+        visualPosOffset += visualPosVelocity * dt;
+        visualRotOffset += visualRotVelocity * dt;
 
         if (movement != null)
         {
@@ -141,8 +144,8 @@ public class WeaponRecoil : MonoBehaviour
             permanentYaw += yawDelta * (1f - Mathf.Clamp01(profile.recoveryFraction));
         }
 
-        visualPosTarget += profile.visualPositionKick * visMult;
-        visualRotTarget += profile.visualRotationKick * visMult;
+        visualPosVelocity += profile.visualPositionKick * visMult * profile.visualImpulseScale;
+        visualRotVelocity += profile.visualRotationKick * visMult * profile.visualImpulseScale;
 
         lastShotTime = Time.time;
     }

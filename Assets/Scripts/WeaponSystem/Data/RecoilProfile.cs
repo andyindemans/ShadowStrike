@@ -24,6 +24,12 @@ public struct RecoilProfile
     //Visual gun kick (local space) #====#
     public Vector3 visualPositionKick;              // typically (0, 0, -0.04)
     public Vector3 visualRotationKick;              // typically (-6, 0, 0) — gun tips up
-    public float visualSnapSpeed;
-    public float visualReturnSpeed;
+    public float visualPositionStiffness;
+    public float visualRotationStiffness;
+    [Range(0f, 2f)] public float visualDampingRatio;
+    public float visualImpulseScale;
+
+    // legacy — replaced by spring
+    [System.Obsolete, HideInInspector] public float visualSnapSpeed;
+    [System.Obsolete, HideInInspector] public float visualReturnSpeed;
 }

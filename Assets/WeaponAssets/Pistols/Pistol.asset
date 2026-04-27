@@ -26,10 +26,15 @@ MonoBehaviour:
     recoveryDelay: 0
     recoverySpeed: 12
     recoveryFraction: 1
+    hipCameraRecoilMultiplier: 0
     aimCameraRecoilMultiplier: 0.35
     aimVisualRecoilMultiplier: 0.7
-    visualPositionKick: {x: -0.1, y: 0.15, z: -0.04}
-    visualRotationKick: {x: -6, y: 0, z: 0}
+    visualPositionKick: {x: 0, y: 0, z: -0.15}
+    visualRotationKick: {x: -15, y: 1.5, z: 0}
+    visualPositionStiffness: 140
+    visualRotationStiffness: 160
+    visualDampingRatio: 0.7
+    visualImpulseScale: 6
     visualSnapSpeed: 0
     visualReturnSpeed: 0
   hipSpread: 3
