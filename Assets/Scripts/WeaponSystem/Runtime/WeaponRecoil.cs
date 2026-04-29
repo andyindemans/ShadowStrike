@@ -7,7 +7,7 @@ using UnityEngine;
 // so recovery returns toward the player's intent angle without losing player input.
 //
 // Visual kick is applied to weaponHolder (the parent of the viewmodel) so it doesn't
-// fight WeaponSway, which writes to the viewmodel's own localPosition.y.
+// fight WeaponMotion, which writes to MotionRig's local pose further up the chain.
 public class WeaponRecoil : MonoBehaviour
 {
     //Refs #=======================#

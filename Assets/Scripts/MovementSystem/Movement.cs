@@ -14,7 +14,6 @@ public class Movement : MonoBehaviour
     public Transform orientation;
     public float maxSpeed = 7f;
     public float crouchMaxSpeed = 3f;
-    public bool enableHeadBobbing = true;
     public Camera camera;
 
     //Crouch & Slide
@@ -37,13 +36,6 @@ public class Movement : MonoBehaviour
     [HideInInspector] public float recoilYawOffset;
     private Vector3 direction;
     private bool isRunning;
-
-    //Head Bobbing
-    private float runBobSpeed = 12f;
-    [Range(0.01f, 0.1f)] public float runBobAmount = 0.05f;
-    private float defaultYPos = 0;
-    private float timer;
-    [HideInInspector] public float bobOffset;   // current head-bob Y delta from defaultYPos — read by WeaponSway
 
     //Input
     private Rigidbody rb;
@@ -125,9 +117,6 @@ public class Movement : MonoBehaviour
         movementSystem.Movement.Sprint.performed += context => sprintInputHeld = true;
         movementSystem.Movement.Sprint.canceled += context => sprintInputHeld = false;
 
-        //Head Bobbing
-        defaultYPos = camera.transform.localPosition.y;
-
         //Seed yaw accumulator from current camera rotation so spawn orientation is preserved.
         desiredX = playerCam.localRotation.eulerAngles.y;
     }
@@ -152,7 +141,6 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
         if (!isWallRunning) Move();
-        if (enableHeadBobbing) HeadBob();
         if ((isWallRight || isWallLeft) && wallrunButtonHeld) Wallrun();
 
         isRunning = rb.linearVelocity.magnitude > 0.5f;
@@ -353,26 +341,6 @@ public class Movement : MonoBehaviour
             wallRunCameraTilt -= Time.deltaTime * maxWallRunCameraTilt * 2;
         if (wallRunCameraTilt < 0 && !isWallRight && !isWallLeft)
             wallRunCameraTilt += Time.deltaTime * maxWallRunCameraTilt * 2;
-    }
-
-    private void HeadBob()
-    {
-        if (!grounded || crouching)
-        {
-            allowRunAnimation = false;
-            return;
-        }
-
-        if (isRunning)
-        {
-            timer += Time.deltaTime * runBobSpeed;
-            bobOffset = Mathf.Sin(timer) * runBobAmount;
-            camera.transform.localPosition = new Vector3(camera.transform.localPosition.x, defaultYPos + bobOffset, camera.transform.localPosition.z);
-            allowRunAnimation = true;
-        } else
-        {
-            allowRunAnimation = false;
-        }
     }
 
     public Vector2 FindVelRelativeToLook()

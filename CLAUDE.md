@@ -15,7 +15,7 @@ Code is split into two top-level subsystems under [Assets/Scripts/](Assets/Scrip
 ### MovementSystem
 [Movement.cs](Assets/Scripts/MovementSystem/Movement.cs) is the player controller — it owns the Rigidbody, ground/wall detection, sprint/crouch/slide/wallrun state, and camera `Look()`. Two public hooks are read by other systems:
 - `Movement.recoilPitchOffset` / `recoilYawOffset` — additive Euler offsets applied on top of mouse input inside `Look()`. **WeaponRecoil writes these every frame**; recovery returns toward player intent without losing input. Pitch is inverted (looking up = more negative `xRotation`).
-- `Movement.bobOffset`, `Movement.isSprinting`, `Movement.grounded`, `Movement.crouching` — read by weapon viewmodel scripts to sync with locomotion state.
+- `Movement.isSprinting`, `Movement.grounded`, `Movement.crouching` — read by weapon viewmodel scripts to sync with locomotion state.
 
 [MoveCamera.cs](Assets/Scripts/MovementSystem/MoveCamera.cs), [Parkour.cs](Assets/Scripts/MovementSystem/Parkour.cs), and [SpeedFX.cs](Assets/Scripts/MovementSystem/SpeedFX.cs) are auxiliary.
 
@@ -49,11 +49,11 @@ The viewmodel rig has a chain of intermediate transforms, and **each transform h
 | `PlayerCam` rotation     | [Movement.Look()](Assets/Scripts/MovementSystem/Movement.cs) (mouse + recoil offsets)                                  |
 | `AimRig` local pose      | [WeaponADSPose](Assets/Scripts/WeaponSystem/Runtime/WeaponADSPose.cs) (lerps to `ADSProfile` while aiming)              |
 | `SprintRig` local pose   | [WeaponSprintPose](Assets/Scripts/WeaponSystem/Runtime/WeaponSprintPose.cs) (lerps to `SprintPoseProfile` while sprinting & not allowed to fire) |
+| `MotionRig` local pose   | [WeaponMotion](Assets/Scripts/WeaponSystem/Runtime/WeaponMotion.cs) (procedural walk bob, idle breathing, look-delay sway)  |
 | `WeaponHolder` local pose| [WeaponRecoil](Assets/Scripts/WeaponSystem/Runtime/WeaponRecoil.cs) (visual gun kick offsets)                          |
-| viewmodel `localPosition.y` | [WeaponSway](Assets/Scripts/WeaponSystem/Runtime/WeaponSway.cs) (walk bob, scaled by ADS speed multiplier)          |
 | `Camera.fieldOfView`     | [WeaponController](Assets/Scripts/WeaponSystem/Runtime/WeaponController.cs) (ADS FOV lerp)                              |
 
-The hierarchy is `PlayerCam → AimRig → SprintRig → WeaponHolder → viewmodel` so the effects compose. When adding a new pose driver, insert a new rig transform with its own owner rather than sharing.
+The hierarchy is `PlayerCam → AimRig → SprintRig → MotionRig → WeaponHolder → viewmodel` so the effects compose. When adding a new pose driver, insert a new rig transform with its own owner rather than sharing.
 
 [WeaponViewModel](Assets/Scripts/WeaponSystem/Runtime/WeaponViewModel.cs) is the animation/FX bridge — it subscribes to `Weapon` events and fires animator triggers/bools. Animator parameter names are constants on that class (`ParamFire`, `ParamReload`, etc.); reuse them rather than re-stringifying.
 

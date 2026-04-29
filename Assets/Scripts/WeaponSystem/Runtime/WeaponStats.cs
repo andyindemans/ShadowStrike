@@ -14,6 +14,7 @@ public struct WeaponStats
     public RecoilProfile recoilProfile;
     public ADSProfile adsProfile;
     public SprintPoseProfile sprintPoseProfile;
+    public WeaponMotionProfile motionProfile;
     public bool oneHanded;
 
     public static WeaponStats Resolve(WeaponData data, IReadOnlyList<AttachmentData> attachments, AmmoType ammo)
@@ -32,6 +33,7 @@ public struct WeaponStats
         s.recoilProfile = data.recoilProfile;
         s.adsProfile = data.adsProfile;
         s.sprintPoseProfile = data.sprintPoseProfile;
+        s.motionProfile = data.motionProfile;
         s.oneHanded = data.oneHanded;
 
         if (attachments == null || attachments.Count == 0) return s;

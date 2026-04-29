@@ -33,7 +33,7 @@ MonoBehaviour:
     visualRotationKick: {x: -15, y: 1.5, z: 0}
     visualPositionStiffness: 140
     visualRotationStiffness: 160
-    visualDampingRatio: 0.7
+    visualDampingRatio: 0.5
     visualImpulseScale: 6
     visualSnapSpeed: 0
     visualReturnSpeed: 0

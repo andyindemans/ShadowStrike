@@ -42,6 +42,9 @@ public class WeaponData : ScriptableObject
     public List<AmmoType> acceptedAmmo = new List<AmmoType>();
     public AmmoType defaultAmmo;
 
+    //Motion #====================#
+    public WeaponMotionProfile motionProfile = WeaponMotionProfile.Default;
+
     //Visuals / animation #========#
     public GameObject viewModelPrefab;
     public RuntimeAnimatorController animatorOverride;

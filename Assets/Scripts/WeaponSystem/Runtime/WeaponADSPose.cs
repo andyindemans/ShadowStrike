@@ -3,8 +3,8 @@ using UnityEngine;
 // Drives an AimRig transform's local pose toward the active weapon's ADSProfile when aiming.
 //
 // AimRig sits between PlayerCam and WeaponHolder so this composes with WeaponRecoil
-// (which owns weaponHolder's local pose) and WeaponSway (which owns the viewmodel's
-// localPosition.y) without fighting them — each transform has a single writer.
+// (which owns weaponHolder's local pose) and WeaponMotion (which owns MotionRig's
+// local pose) without fighting them — each transform has a single writer.
 public class WeaponADSPose : MonoBehaviour
 {
     //Refs #=======================#
