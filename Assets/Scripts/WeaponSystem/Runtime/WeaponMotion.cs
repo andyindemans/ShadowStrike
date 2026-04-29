@@ -14,6 +14,11 @@ public class WeaponMotion : MonoBehaviour
     private Vector3 restLocalPos;
     private Quaternion restLocalRot;
     private float bobPhase;
+    private float perlinTime;
+    private Vector3 smoothBobPos;
+    private Vector3 smoothBobPosVel;
+    private Vector3 smoothBobRot;
+    private Vector3 smoothBobRotVel;
     private float breathPhase;
     private float breathWeight = 1f;
     private Vector3 swayPos;
@@ -47,6 +52,8 @@ public class WeaponMotion : MonoBehaviour
             ? new Vector3(playerRb.linearVelocity.x, 0f, playerRb.linearVelocity.z)
             : Vector3.zero;
 
+        perlinTime += Time.deltaTime * profile.walkBobNoiseFrequency;
+
         if (movement != null && movement.grounded && !movement.crouching && playerRb != null)
         {
             float speedNorm = Mathf.Clamp01(planar.magnitude / Mathf.Max(0.01f, movement.maxSpeed));
@@ -59,16 +66,23 @@ public class WeaponMotion : MonoBehaviour
 
                 bobPhase += Time.deltaTime * profile.walkBobBaseFrequency * speedNorm * adsScale * Mathf.PI * 2f;
 
+                float modPosX = 1f + (Mathf.PerlinNoise(perlinTime, 0f) * 2f - 1f) * profile.walkBobVariance;
+                float modPosY = 1f + (Mathf.PerlinNoise(perlinTime, 13.7f) * 2f - 1f) * profile.walkBobVariance;
+                float modPosZ = 1f + (Mathf.PerlinNoise(perlinTime, 27.4f) * 2f - 1f) * profile.walkBobVariance;
+                float modRotX = 1f + (Mathf.PerlinNoise(perlinTime, 41.1f) * 2f - 1f) * profile.walkBobVariance;
+                float modRotY = 1f + (Mathf.PerlinNoise(perlinTime, 54.8f) * 2f - 1f) * profile.walkBobVariance;
+                float modRotZ = 1f + (Mathf.PerlinNoise(perlinTime, 68.5f) * 2f - 1f) * profile.walkBobVariance;
+
                 bobPos = new Vector3(
-                    Mathf.Sin(bobPhase) * profile.walkBobPosAmplitude.x,
-                    -Mathf.Abs(Mathf.Sin(bobPhase)) * profile.walkBobPosAmplitude.y,
-                    Mathf.Sin(bobPhase * 0.5f) * profile.walkBobPosAmplitude.z
+                    Mathf.Sin(bobPhase) * profile.walkBobPosAmplitude.x * modPosX,
+                    -Mathf.Abs(Mathf.Sin(bobPhase)) * profile.walkBobPosAmplitude.y * modPosY,
+                    Mathf.Sin(bobPhase * 0.5f) * profile.walkBobPosAmplitude.z * modPosZ
                 ) * speedNorm * adsScale;
 
                 bobRot = new Vector3(
-                    Mathf.Sin(bobPhase) * profile.walkBobRotAmplitude.x,
-                    Mathf.Sin(bobPhase * 0.5f) * profile.walkBobRotAmplitude.y,
-                    Mathf.Cos(bobPhase) * profile.walkBobRotAmplitude.z
+                    Mathf.Sin(bobPhase) * profile.walkBobRotAmplitude.x * modRotX,
+                    Mathf.Sin(bobPhase * 0.5f) * profile.walkBobRotAmplitude.y * modRotY,
+                    Mathf.Sin(bobPhase) * profile.walkBobRotAmplitude.z * modRotZ
                 ) * speedNorm * adsScale;
             }
             else
@@ -80,6 +94,11 @@ public class WeaponMotion : MonoBehaviour
         {
             bobPhase = Mathf.Lerp(bobPhase, 0f, 1f - Mathf.Exp(-12f * Time.deltaTime));
         }
+
+        float omega = 2f * Mathf.PI * profile.walkBobSmoothFrequency;
+        float k = omega * omega;
+        IntegrateSpring(ref smoothBobPos, ref smoothBobPosVel, bobPos, k, profile.walkBobSmoothDamping, Time.deltaTime);
+        IntegrateSpring(ref smoothBobRot, ref smoothBobRotVel, bobRot, k, profile.walkBobSmoothDamping, Time.deltaTime);
 
         breathPhase += Time.deltaTime * profile.idleBreathFrequency * Mathf.PI * 2f;
 
@@ -129,8 +148,8 @@ public class WeaponMotion : MonoBehaviour
         IntegrateSpring(ref swayPos, ref swayPosVel, targetSwayPos, profile.lookSwayStiffness, profile.lookSwayDampingRatio, Time.deltaTime);
         IntegrateSpring(ref swayRotEuler, ref swayRotVel, targetSwayRot, profile.lookSwayStiffness, profile.lookSwayDampingRatio, Time.deltaTime);
 
-        transform.localPosition = restLocalPos + bobPos + breathPos + swayPos;
-        transform.localRotation = restLocalRot * Quaternion.Euler(bobRot + breathRot + swayRotEuler);
+        transform.localPosition = restLocalPos + smoothBobPos + breathPos + swayPos;
+        transform.localRotation = restLocalRot * Quaternion.Euler(smoothBobRot + breathRot + swayRotEuler);
     }
 
     static void IntegrateSpring(ref Vector3 pos, ref Vector3 vel, Vector3 target, float k, float zeta, float dt)

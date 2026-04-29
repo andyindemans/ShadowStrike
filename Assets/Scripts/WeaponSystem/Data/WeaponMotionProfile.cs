@@ -10,6 +10,10 @@ public struct WeaponMotionProfile
     public Vector3 walkBobRotAmplitude;     // Euler degrees
     public float walkBobBaseFrequency;
     public float walkBobMinSpeed;
+    public float walkBobNoiseFrequency;
+    public float walkBobVariance;           // Perlin amplitude modulator strength (0..1).
+    public float walkBobSmoothFrequency;    // Output spring's natural frequency in Hz.
+    public float walkBobSmoothDamping;      // Output spring damping ratio.
 
     //Idle Breathing #===========#
     public float idleBreathFrequency;
@@ -30,10 +34,14 @@ public struct WeaponMotionProfile
     // field initializer and by WeaponMotion's fallback when no weapon is active.
     public static WeaponMotionProfile Default => new WeaponMotionProfile
     {
-        walkBobPosAmplitude = new Vector3(0.012f, 0.018f, 0f),
-        walkBobRotAmplitude = new Vector3(1.2f, 0.6f, 1.8f),
+        walkBobPosAmplitude = new Vector3(0.012f, 0.018f, 0.006f),
+        walkBobRotAmplitude = new Vector3(0.5f, 0.3f, 0.6f),
         walkBobBaseFrequency = 1f,
         walkBobMinSpeed = 0.5f,
+        walkBobNoiseFrequency = 0.7f,
+        walkBobVariance = 0.5f,
+        walkBobSmoothFrequency = 10f,
+        walkBobSmoothDamping = 1f,
 
         idleBreathFrequency = 0.6f,
         idleBreathAmplitude = new Vector3(0f, 0.0015f, 0f),
