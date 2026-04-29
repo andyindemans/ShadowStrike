@@ -33,7 +33,7 @@ MonoBehaviour:
     visualRotationKick: {x: -15, y: 1.5, z: 0}
     visualPositionStiffness: 140
     visualRotationStiffness: 160
-    visualDampingRatio: 0.5
+    visualDampingRatio: 0.6
     visualImpulseScale: 6
     visualSnapSpeed: 0
     visualReturnSpeed: 0
@@ -60,6 +60,25 @@ MonoBehaviour:
   acceptedAmmo:
   - {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
   defaultAmmo: {fileID: 11400000, guid: f4cff0b40a61b6d4082db3559f2c0672, type: 2}
+  motionProfile:
+    walkBobPosAmplitude: {x: 0.012, y: 0.018, z: 0.006}
+    walkBobRotAmplitude: {x: 0.5, y: 0.3, z: 0.6}
+    walkBobBaseFrequency: 1
+    walkBobMinSpeed: 0.5
+    walkBobNoiseFrequency: 0.7
+    walkBobVariance: 0.5
+    walkBobSmoothFrequency: 10
+    walkBobSmoothDamping: 1
+    idleBreathFrequency: 0.6
+    idleBreathAmplitude: {x: 0, y: 0.0015, z: 0}
+    idleBreathRotAmplitude: {x: 0.25, y: 0.15, z: 0}
+    idleBreathADSScale: 0.35
+    idleBreathMoveFadeSpeed: 8
+    lookSwayMaxOffset: {x: 0.018, y: 0.012, z: 0}
+    lookSwayMaxRot: {x: 2.5, y: 4, z: 1.5}
+    lookSwaySensitivity: {x: 0.0025, y: 0.0025}
+    lookSwayStiffness: 120
+    lookSwayDampingRatio: 0.85
   viewModelPrefab: {fileID: 0}
   animatorOverride: {fileID: 0}
   allowedAttachmentSlots: 3
