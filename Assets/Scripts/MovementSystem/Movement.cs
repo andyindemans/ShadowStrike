@@ -316,9 +316,13 @@ public class Movement : MonoBehaviour
 
     private void Look()
     {
+        // Mouse delta from the Input System is already the accumulated pixel movement
+        // per frame — it must NOT be scaled by Time.deltaTime, which varies with
+        // framerate and would make rotation speed framerate-dependent. A small constant
+        // (0.01f) keeps the inspector "sensitivity" values in a reasonable range.
         Vector2 mouseDelta = movementSystem.Movement.MouseLook.ReadValue<Vector2>();
-        float mouseX = mouseDelta.x * sensitivity * Time.deltaTime * sensMultiplier;
-        float mouseY = mouseDelta.y * sensitivity * Time.deltaTime * sensMultiplier;
+        float mouseX = mouseDelta.x * sensitivity * 0.01f * sensMultiplier;
+        float mouseY = mouseDelta.y * sensitivity * 0.01f * sensMultiplier;
 
         //Accumulate mouse intent. Recoil rides on top via recoilPitchOffset / recoilYawOffset
         //so it can recover toward the player's intended aim without losing player input.
