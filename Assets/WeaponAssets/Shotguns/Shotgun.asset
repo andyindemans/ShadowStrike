@@ -15,7 +15,7 @@ MonoBehaviour:
   id: shotgun
   displayName: Shotgun
   firingMode: 1
-  fireRate: 1
+  fireRate: 1.5
   range: 200
   baseRecoil: 1
   recoilProfile:
@@ -46,17 +46,17 @@ MonoBehaviour:
   aimFOV: 50
   aimMoveSpeedMultiplier: 0.4
   adsProfile:
-    aimPositionOffset: {x: -0.15, y: 0.15, z: 0}
-    aimRotationOffset: {x: 0, y: 2, z: 0}
+    aimPositionOffset: {x: -0.15, y: 0.12, z: 0}
+    aimRotationOffset: {x: 0, y: 0, z: 0}
     adsLerpSpeed: 12
   oneHanded: 0
   sprintPoseProfile:
-    sprintPositionOffset: {x: 0.5, y: -0.08, z: 0.4}
-    sprintRotationOffset: {x: 15, y: -85, z: -25}
+    sprintPositionOffset: {x: 0.1, y: 0, z: 0.2}
+    sprintRotationOffset: {x: 15, y: -80, z: -25}
     bobPositionAmplitude: {x: 0, y: 0.008, z: 0}
     bobRotationAmplitude: {x: 3, y: 0, z: 1}
-    bobFrequency: 2.2
-    lerpSpeed: 10
+    bobFrequency: 2.5
+    lerpSpeed: 6
   acceptedAmmo:
   - {fileID: 11400000, guid: 72bb1dc0fc74fdb49b83c14a2b6a30f2, type: 2}
   defaultAmmo: {fileID: 11400000, guid: 72bb1dc0fc74fdb49b83c14a2b6a30f2, type: 2}

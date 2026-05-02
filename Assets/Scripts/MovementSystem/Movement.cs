@@ -9,7 +9,7 @@ public class Movement : MonoBehaviour
     public float runSpeed = 6500f;
     public float walkSpeed = 1000f;
     public float crouchSpeed = 2000f;
-    public float sensitivity = 50.0f;
+    public float sensitivity = 11.0f;
     public Transform playerCam;
     public Transform orientation;
     public float maxSpeed = 7f;
@@ -317,8 +317,8 @@ public class Movement : MonoBehaviour
     private void Look()
     {
         Vector2 mouseDelta = movementSystem.Movement.MouseLook.ReadValue<Vector2>();
-        float mouseX = mouseDelta.x * sensitivity * Time.deltaTime * sensMultiplier;
-        float mouseY = mouseDelta.y * sensitivity * Time.deltaTime * sensMultiplier;
+        float mouseX = mouseDelta.x * sensitivity * 0.01f * sensMultiplier;
+        float mouseY = mouseDelta.y * sensitivity * 0.01f * sensMultiplier;
 
         //Accumulate mouse intent. Recoil rides on top via recoilPitchOffset / recoilYawOffset
         //so it can recover toward the player's intended aim without losing player input.
@@ -380,7 +380,7 @@ public class Movement : MonoBehaviour
                 else
                     rb.AddForce(-orientation.right * wallrunForce / 7 * Time.fixedDeltaTime);
             }
-        } 
+        }
     }
     private void StopWallRun()
     {
